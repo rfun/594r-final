@@ -1,0 +1,71 @@
+---
+title: "Input Variable Analysis"
+---
+
+From this point onwards, we will only be considering the non-collinear variables for our analysis. As we can see below, after removing the collinear variables we are left with 21 predictor variables. 
+
+``` {r message=FALSE}
+
+library(tidyverse)
+library(ggplot2)
+library(plotly)
+
+main_data_file = read_csv('data_monthly.csv', col_names=TRUE)
+
+#Remove the columns that are not required. 
+subset_data = select(main_data_file,-c(2,11,24,7,9,29,28))
+colnames(subset_data)
+
+```
+
+We are also going to do some cleanup in order to get the names of the columns without spaces so that we may refer to them in our code. 
+
+``` {r message=FALSE}
+
+names(subset_data)<-str_replace_all(names(subset_data), c(" " = "." , "," = "" ))
+colnames(subset_data)
+# ensure no empty rows are used
+subset_data = subset_data[complete.cases(subset_data), ]
+```
+
+
+
+Finally, we can now run a basic `Linear Regression` model using the `lm` function provided by R
+
+``` {r message=FALSE, warning=FALSE}
+
+fit1<- lm(Surface.Runoff.Amount~Canopy.Water.Amount+Downward.Heat.Flux.In.Soil+Evaporation.Flux.From.Canopy+Evaporation.Flux.From.Soil+Precipitation.Flux+Root.Zone.Soil.Moisture+Soil.Temperature+Specific.Humidity+Subsurface.Runoff.Amount+Surface.Air.Pressure+Surface.Albedo+Surface.Downwelling.Longwave.Flux.In.Air+Surface.Downwelling.Shortwave.Flux.In.Air+Surface.Net.Downward.Longwave.Flux+Surface.Net.Downward.Shortwave.Flux+Surface.Runoff.Amount+Surface.Snow.Amount+Surface.Snow.Melt.Amount+Surface.Temperature+Surface.Upward.Latent.Heat.Flux+Surface.Upward.Sensible.Heat.Flux+Wind.Speed, data = subset_data
+)
+summary(fit1)
+
+```
+
+
+In this result we can see that there are a few variables with very low significance to the solution. So we are going to eliminate them and try re running the model. Comparing the two R<sup>2</sup> values will tell us if the model performs better or not. So we are going to remove the following variables:
+
+
+- Canopy.Water.Amount
+- Downward.Heat.Flux.In.Soil
+- Evaporation.Flux.From.Canopy
+- Evaporation.Flux.From.Soil
+- Specific.Humidity
+- Subsurface.Runoff.Amount
+- Surface.Downwelling.Longwave.Flux.In.Air
+- Surface.Net.Downward.Longwave.Flux
+- Surface.Net.Downward.Shortwave.Flux
+- Surface.Snow.Melt.Amount
+- Surface.Upward.Latent.Heat.Flux
+- Surface.Upward.Sensible.Heat.Flux
+- Wind.Speed
+
+In order to do that, we can simply eliminate them from our lm analysis function. This leaves us with 9 predictor variables.
+
+``` {r message=FALSE, warning=FALSE}
+
+fit1<- lm(Surface.Runoff.Amount~Precipitation.Flux+Root.Zone.Soil.Moisture+Soil.Temperature+Surface.Air.Pressure+Surface.Albedo+Surface.Downwelling.Shortwave.Flux.In.Air+Surface.Runoff.Amount+Surface.Snow.Amount+Surface.Temperature, data = subset_data
+)
+summary(fit1)
+
+```
+As we can see that after removing those variables that the LM model considers as insignificant, our model results got worse. So we are going to keep those variables in for our final analysis. 
+

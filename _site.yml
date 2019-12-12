@@ -1,0 +1,12 @@
+name: "my-website"
+navbar:
+  title: "Predicting Surface Runoff"
+  left:
+    - text: "Introduction"
+      href: index.html
+    - text: "Collinearity Analysis"
+      href: collinearity.html
+    - text: "Input Variable Analysis"
+      href: input.html
+    - text: "Model Results"
+      href: results.html

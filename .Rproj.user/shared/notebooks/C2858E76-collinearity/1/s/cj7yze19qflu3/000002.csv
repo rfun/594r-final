@@ -1,0 +1,5 @@
+"0",""
+"0","X<-main_data_file[,3:12]"
+"0","library(GGally)"
+"0","ggpairs(X)"
+"0",""

@@ -1,0 +1,38 @@
+---
+title: "Final results"
+---
+``` {r message=FALSE, warning=FALSE}
+
+library(tidyverse)
+library(ggplot2)
+library(plotly)
+
+main_data_file = read_csv('data_monthly.csv', col_names=TRUE)
+
+#Remove the columns that are not required. 
+subset_data = select(main_data_file,-c(2,11,24,7,9,29,28))
+names(subset_data)<-str_replace_all(names(subset_data), c(" " = "." , "," = "" ))
+
+fit1<- lm(Surface.Runoff.Amount~Canopy.Water.Amount+Downward.Heat.Flux.In.Soil+Evaporation.Flux.From.Canopy+Evaporation.Flux.From.Soil+Precipitation.Flux+Root.Zone.Soil.Moisture+Soil.Temperature+Specific.Humidity+Subsurface.Runoff.Amount+Surface.Air.Pressure+Surface.Albedo+Surface.Downwelling.Longwave.Flux.In.Air+Surface.Downwelling.Shortwave.Flux.In.Air+Surface.Net.Downward.Longwave.Flux+Surface.Net.Downward.Shortwave.Flux+Surface.Runoff.Amount+Surface.Snow.Amount+Surface.Snow.Melt.Amount+Surface.Temperature+Surface.Upward.Latent.Heat.Flux+Surface.Upward.Sensible.Heat.Flux+Wind.Speed, data = subset_data
+)
+summary(fit1)
+
+
+#Spend x Residuals Plot
+plot(fit1$resid~subset_data$Surface.Runoff.Amount[order(subset_data$Surface.Runoff.Amount)],
+ main="Surface Runoff Values x Residuals\nfor Simple Regression",
+ xlab="Surface Runoff Values", ylab="Residuals", xlim=c(0.001,0.01), ylim=c(-0.005,0.005))
+#Histogram of Residuals
+hist(fit1$resid, main="Histogram of Residuals",
+ ylab="Residuals")
+
+```
+
+
+## Conclusions
+
+- The model doesn't present a very good fit and the error rates are significantly high.
+- The date currently was extracted for a single point along the Snake River in Idaho falls. This needs to change and we would need to sample the data for an entire region as well as take a distance-based average of the data along that region. 
+- We probably need to switch to a daily timestep since the monthly data we have is not enough for most models to effectively create a pattern.  
+- Once a model has been trained for a region, we need to evaluate it with actual live data from the LDAS system. 
+

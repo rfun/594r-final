@@ -1,0 +1,26 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1576129203682.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "1640579466",
+    "id" : "B37DB108",
+    "lastKnownWriteTime" : 1576129766,
+    "last_content_update" : 1576129766997,
+    "path" : "~/Desktop/class/CE 594R/594_final/results.Rmd",
+    "project_path" : "results.Rmd",
+    "properties" : {
+        "cursorPosition" : "37,0",
+        "scrollLine" : "13",
+        "tempName" : "Untitled1"
+    },
+    "read_only" : false,
+    "read_only_alternatives" : [
+    ],
+    "relative_order" : 7,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_markdown"
+}

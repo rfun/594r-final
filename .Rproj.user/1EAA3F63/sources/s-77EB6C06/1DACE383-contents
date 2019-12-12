@@ -1,0 +1,39 @@
+---
+title: "Collinearity Analysis"
+---
+
+One of the assumptions of Classical Linear Regression Model is that there is no exact collinearity between the explanatory variables. Having collinear variables in most regression models will cause our prediction accuracy to fall significantly. One of the easiest ways to solve this issue is to examine the correlation between each pair of explanatory variables. If two of the variables are highly correlated, then this may the possible source of multicollinearity. 
+
+Once we have identified highly correlated variable, we need to see which out of the pair has the highest correlation to our outcome variable. Once we have identified those, we can elimiate the other variable from our analysis. However, a preliminary check to see if we are doing better or worse, is to run the model with the collinear variable and without the collinear variables and compare the accuracy and ` RMSE` values. 
+
+
+``` {r message=FALSE}
+
+library(tidyverse)
+library(ggplot2)
+library(plotly)
+
+main_data_file = read_csv('data_monthly.csv', col_names=TRUE)
+
+X<-main_data_file[,2:12]
+library(GGally)
+ggpairs(X)
+
+library(corpcor)
+cor2pcor(cov(X))
+
+```
+
+
+## Results from collinearity analysis
+
+The following variables were removed from future analysis: 
+
+ - Air Temperature
+ - Snowfall Flux
+ - Surface Snow Thickness
+ - Potential Evaporation Flux
+ - Rainfall Flux (Since it’s the same thing as precipitation flux) 
+ - Water Evaporation Flux (It’s a part of another flux variable) 
+ - Transpiration Flux From Veg
+

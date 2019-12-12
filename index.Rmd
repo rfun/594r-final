@@ -1,0 +1,38 @@
+---
+title: "Predicting Surface Runoff"
+---
+
+A major problem across developing countries in the world is accurately predicting floods and droughts. Such regions are usually devoid of large scale funded meteorological simulations as well as access to a large number of weather satellites focused on their region. However, we do have access to programs such the `Land Data Assimilation System (LDAS)` by `NASA` which can provide us with global datasets containing various hydrological and atmospheric recordings which can be used to predict surface runoff and hence evaluate drought/flooding conditions. 
+
+One such dataset, is the [Global Land Data Assimilation System (GLDAS)](https://ldas.gsfc.nasa.gov/gldas) which ingests satellite- and ground-based observational data products, using advanced land surface modeling and data assimilation techniques, in order to generate optimal fields of land surface states and fluxes (Rodell et al., 2004a). The software, which has been streamlined and parallelized by the Land Information System (LIS) sister project, drives multiple, offline (not coupled to the atmosphere) land surface models, integrates a huge quantity of observation based data, executes globally at high resolutions (2.5-degrees to 1 km), and is capable of producing results in near-real time.
+
+Using the above-mentioned dataset, if we are able to establish a model that can predict future surface runoff, we can use those runoffs in a simulation process called [RAPID](https://github.com/c-h-david/rapid/) which will tell us exactly if a river may flood or not. 
+
+The outcome variable in this case is `Surface Runoff` which is a continuous numeric value. This dataset contains the average of all 3-hour intervals over the month for all the variables. So, the actual values in the dataset are not the total runoff for the month, but rather an average every 3 hour. This value can be converted to the total runoff amount, but since all the other variables are also 3-hour and when we are examining each time step, we are only worried about the instantaneous state. Finally, since future data will also be in the format of instantaneous averages, the values were left unaltered. 
+
+
+
+``` {r message=FALSE}
+library(tidyverse)
+library(ggplot2)
+
+library(plotly)
+
+
+main_data_file = read_csv('data_monthly.csv', col_names=TRUE)
+
+x <- list(
+  title = "TimeStamp"
+)
+y <- list(
+  title = "Surface Runoff (avg of 3 hour)"
+  )
+
+main_data_file <- main_data_file %>% rename(surface_runoff = "Surface Runoff Amount") 
+main_data_file %>%
+  plot_ly(width = 960, height = 600) %>%
+  layout(xaxis = x, yaxis = y) %>%
+  add_trace(x = ~DateTime, y = ~surface_runoff, type ="scatter", mode ="lines+markers", name = 'Surface Runoff Amount')
+
+
+```
