@@ -10,3 +10,5 @@ navbar:
       href: input.html
     - text: "Model Results"
       href: results.html
+      
+output_dir: "."
